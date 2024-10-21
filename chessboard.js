@@ -14,13 +14,19 @@ let all_queen_positions = [];
 
 function createBoard(size, index) {
     const board = document.getElementById('chessboard');
-    board.innerHTML = '';  
+	board.innerHTML = '';  
 
-    const boardDimension = 600; 
-    const squareSize = boardDimension / size;  
+    const container = document.getElementById('container'); 
+    const containerRect = container.getBoundingClientRect(); 
+
+    const boardDimension = Math.min(containerRect.width, 600); 
+    const squareSize = boardDimension / size; // Calculate square size based on the number of squares
 
     board.style.gridTemplateColumns = `repeat(${size}, ${squareSize}px)`;
     board.style.gridTemplateRows = `repeat(${size}, ${squareSize}px)`;
+
+    board.style.width = `${boardDimension}px`;
+    board.style.height = `${boardDimension}px`;
 
     let isWhite = false;
 	
@@ -129,9 +135,17 @@ function updateDisplay() {
         successMessage.style.display = 'block'; 
     } else {
         successMessage.style.display = 'none'; 
-    }	
-	
+    }
 }
+
+// Function to handle resizing
+function handleResize() {
+    createBoard(8, current_board_index);
+}
+
+// Add event listener for window resize
+window.addEventListener('resize', handleResize);
+
 
 // ---------------- Board legality
 function draw_walls(size,walls) {
